@@ -1,0 +1,57 @@
+######################################################################
+# conan-multiPlatform.yml
+#
+# Copyright © 2025 David L. Armstrong
+#
+# This workflow will optionally run the conan-singlePlatform.yml workflow
+# across a list of selected platforms.
+#
+# For more information see:
+# - https://github.com/DaverSomethingSomethingOrg/conan-github-workflows
+#
+
+name: Conan C/C++ multi-platform CI
+
+on:
+  workflow_call:
+    inputs:
+      runner_selection:
+        type: string
+        default: self-hosted
+      ubuntu-aarch64-enabled:
+        type: boolean
+        default: true
+      ubuntu-x86_64-enabled:
+        type: boolean
+        default: false
+      almalinux-aarch64-enabled:
+        type: boolean
+        default: true
+      almalinux-x86_64-enabled:
+        type: boolean
+        default: false
+
+jobs:
+  conan_multi_platform:
+    strategy:
+      matrix:
+        include:
+          - platform: "ubuntu-aarch64"
+            container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
+            is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
+          - platform: "ubuntu-x86_64"
+            container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
+            is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
+          - platform: "almalinux-aarch64"
+            container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:aarch64-latest"
+            is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
+          - platform: "almalinux-x86_64"
+            container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
+            is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
+    uses: ./.github/workflows/conan-singlePlatform.yml
+    secrets: inherit
+    with:
+      runner_selection: ${{ inputs.runner_selection }}
+      container_image: ${{ matrix.container_image }}
+      is_enabled: ${{ matrix.is_enabled }}
+      

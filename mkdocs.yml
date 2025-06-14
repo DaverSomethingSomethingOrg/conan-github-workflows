@@ -1,0 +1,65 @@
+site_name: "Conan GitHub Actions Reusable Workflows"
+copyright: Copyright © 2025, David L. Armstrong.
+repo_url: https://github.com/DaverSomethingSomethingOrg/conan-github-workflows
+#site_url: https://github.com/DaverSomethingSomethingOrg/conan-github-workflows
+#edit_uri_template: 'edit/main/docs/{path}'
+docs_dir: docs/
+
+extra:
+  version:
+    provider: mike
+
+plugins:
+#  - techdocs-core
+#   - mkdocstrings:
+#       default_handler: python
+#       handlers:
+#         python:
+#           paths: [src]
+#           options:
+# #            inherited_members: true
+#             filters:
+#               - "!^__"
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.annotate
+    - navigation.footer
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - toc:
+      permalink: '#'
+      toc_depth: 4
+  - attr_list
+  - def_list
+  - tables
+  - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.magiclink
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      linenums: false
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - callouts
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+watch:
+  - docs/
+
+nav:
+  - Introduction: 'README.md'
+  - Apache License v2.0: 'LICENSE.txt'
