@@ -21,9 +21,6 @@ on:
       runner_selection:
         type: string
         default: self-hosted
-      container_options:
-        type: string
-        default: ""
       container_image:
         type: string
         default: 'ubuntu:latest'
@@ -41,7 +38,6 @@ jobs:
     continue-on-error: true
     container:
       image: ${{ inputs.container_image }}
-      options: ${{ inputs.container_options }}
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
