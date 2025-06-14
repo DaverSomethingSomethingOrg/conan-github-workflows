@@ -39,12 +39,14 @@ jobs:
         include:
           - platform: "ubuntu-aarch64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
+            container_options: "--platform linux/arm64"
             is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
           - platform: "ubuntu-x86_64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
             is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
           - platform: "almalinux-aarch64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:aarch64-latest"
+            container_options: "--platform linux/arm64"
             is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
           - platform: "almalinux-x86_64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
@@ -54,5 +56,6 @@ jobs:
     with:
       runner_selection: ${{ inputs.runner_selection }}
       container_image: ${{ matrix.container_image }}
+      container_options: ${{ matrix.container_options }}
       is_enabled: ${{ matrix.is_enabled }}
  
