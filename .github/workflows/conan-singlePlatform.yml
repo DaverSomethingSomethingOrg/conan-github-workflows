@@ -37,6 +37,7 @@ jobs:
     runs-on: ${{ inputs.runner_selection }}
     container:
       image: ${{ inputs.container_image }}
+      options: --user 0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
