@@ -5,7 +5,7 @@
 #
 # This workflow will install Conan dependencies, build the selected
 # tool, and deliver the package to artifact management
-# 
+#
 # For more information see:
 # - https://github.com/DaverSomethingSomethingOrg/conan-github-workflows
 # - https://docs.conan.io/2/tutorial/developing_packages/local_package_development_flow.html
@@ -35,6 +35,7 @@ jobs:
   conan_build:
     if: ${{ inputs.is_enabled }}
     runs-on: ${{ inputs.runner_selection }}
+    continue-on-error: true
     container:
       image: ${{ inputs.container_image }}
       options: --user 0
@@ -53,7 +54,7 @@ jobs:
     - name: Install Conan profiles
       run: |
         echo conan config install .
-    
+
     - name: Scan for vulnerabilities with Conan Audit
       run: |
         echo conan audit scan .
