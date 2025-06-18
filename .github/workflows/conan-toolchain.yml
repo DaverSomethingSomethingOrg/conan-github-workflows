@@ -78,7 +78,7 @@ jobs:
         fi
         if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
           conan remote disable conancenter
-          conan remote add "${{ inputs.conan_recipe_remote }}"
+          conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
         fi
 
     - name: Scan for vulnerabilities with Conan Audit
