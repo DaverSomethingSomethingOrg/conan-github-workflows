@@ -78,6 +78,7 @@ jobs:
         fi
         if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
           conan remote disable conancenter
+          conan remote remove conan-center-local
           conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
         fi
 
