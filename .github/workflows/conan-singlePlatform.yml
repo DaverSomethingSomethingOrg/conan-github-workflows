@@ -35,7 +35,6 @@ jobs:
   conan_build:
     if: ${{ inputs.is_enabled }}
     runs-on: ${{ inputs.runner_selection }}
-    continue-on-error: true
     container:
       image: ${{ inputs.container_image }}
       credentials:

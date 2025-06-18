@@ -1,0 +1,98 @@
+######################################################################
+# conan-toolchain.yml
+#
+# Copyright © 2025 David L. Armstrong
+#
+# This workflow will process a single "toolchain" conanfile.py build.
+# Special provisions are made for delivering multiple packages at once.
+#
+# For more information see:
+# - https://github.com/DaverSomethingSomethingOrg/conan-github-workflows
+# - https://docs.conan.io/2/tutorial/developing_packages/local_package_development_flow.html
+#
+
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#example-including-paths
+
+name: Conan C/C++ toolchain build
+
+on:
+  workflow_call:
+    inputs:
+      runner_selection:
+        type: string
+        default: self-hosted
+      component_subdirectory:
+        type: string
+        default: "src"
+      conan_recipe_remote:
+        type: string
+      container_image:
+        type: string
+        default: 'ubuntu:latest'
+      conan_profile:
+        type: string
+        default:
+      conan_deployer_repo:
+        type: string
+        required: true
+        default: https://github.com/DaverSomethingSomethingOrg/conan-system-packaging.git
+      conan_deployer:
+        type: string
+        default: 'deb_deployer'
+      conan_profile_repo:
+        type: string
+        default:  # conan images should come with default profile installed.. good enough for most cases
+      toolchain_prefix:
+        type: string
+        required: true
+      is_enabled:
+        type: boolean
+        default: true
+
+jobs:
+  toolchain_build:
+    if: ${{ inputs.is_enabled }}
+    runs-on: ${{ inputs.runner_selection }}
+    container:
+      image: ${{ inputs.container_image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+#    - name: Install and setup Conan
+#      uses: conan-io/setup-conan@v1
+#      with:
+#        audit_token: ${{ secrets.MY_CONAN_AUDIT_TOKEN }}
+
+    - name: Install Conan Toolchain Deployers, Profiles, and Remote
+      run: |
+        conan config install ${{ inputs.conan_deployer_repo }}
+        if [ -n "${{ inputs.conan_profile_repo }}" ]; then
+          conan config install ${{ inputs.conan_profile_repo }}
+        fi
+        if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
+          conan remote disable conancenter
+          conan remote add "${{ inputs.conan_recipe_remote }}"
+        fi
+
+    - name: Scan for vulnerabilities with Conan Audit
+      run: |
+        conan audit scan "${{ inputs.component_subdirectory }}"
+
+    - name: Build and Cache all tools and dependencies
+      run: |
+        conan install \
+          --build=missing \
+          --options="*:install_prefix=${{ inputs.toolchain_prefix }}" \
+          "${{ inputs.component_subdirectory }}"
+
+    - name: System Package Deployer
+      run: |
+        conan install
+          --deployer-folder=package_deploy \
+          --deployer="${{ inputs.conan_deployer }}" \
+          --options="*:install_prefix=${{ inputs.toolchain_prefix }}" \
+          "${{ inputs.component_subdirectory }}"

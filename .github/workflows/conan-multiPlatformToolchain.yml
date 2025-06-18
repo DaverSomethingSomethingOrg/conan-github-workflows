@@ -10,7 +10,7 @@
 # - https://github.com/DaverSomethingSomethingOrg/conan-github-workflows
 #
 
-name: Conan C/C++ multi-platform CI
+name: Conan C/C++ multi-platform Toolchain
 
 on:
   workflow_call:
@@ -18,6 +18,14 @@ on:
       runner_selection:
         type: string
         default: self-hosted
+      component_subdirectory:
+        type: string
+        default: "src"
+      conan_recipe_remote:
+        type: string
+      toolchain_prefix:
+        type: string
+        required: true
       ubuntu-aarch64-enabled:
         type: boolean
         default: true
@@ -32,7 +40,7 @@ on:
         default: false
 
 jobs:
-  conan_multi_platform:
+  conan_mp_toolchain:
     name: ${{ matrix.platform }}
     strategy:
       fail-fast: false
@@ -41,18 +49,25 @@ jobs:
           - platform: "ubuntu-aarch64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
             is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
+            conan_deployer: 'deb_deployer'
           - platform: "ubuntu-x86_64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
             is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
+            conan_deployer: 'deb_deployer'
           - platform: "almalinux-aarch64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:aarch64-latest"
             is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
+            conan_deployer: 'rpm_deployer'
           - platform: "almalinux-x86_64"
             container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
             is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
-    uses: ./.github/workflows/conan-singlePlatform.yml
+            conan_deployer: 'rpm_deployer'
+    uses: ./.github/workflows/conan-toolchain.yml
     secrets: inherit
     with:
       runner_selection: ${{ inputs.runner_selection }}
+      component_subdirectory: ${{ inputs.component_subdirectory }}
+      toolchain_prefix: ${{ inputs.toolchain_prefix }}
       container_image: ${{ matrix.container_image }}
       is_enabled: ${{ matrix.is_enabled }}
+      conan_deployer: ${{ matrix.conan_deployer }}
