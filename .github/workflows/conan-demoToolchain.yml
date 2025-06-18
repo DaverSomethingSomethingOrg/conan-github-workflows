@@ -20,7 +20,7 @@ on:
         default: self-hosted
       conan_recipe_remote:
         type: string
-        default: "https://github.com/daversomethingsomething/conan-center-index.git"
+        default: "./conan-center-index"  # We provide this as a git submodule since we use a non-default branch
       toolchain_prefix:
         type: string
         default: "/opt/toolchain"
