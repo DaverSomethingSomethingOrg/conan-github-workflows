@@ -67,6 +67,7 @@ jobs:
     with:
       runner_selection: ${{ inputs.runner_selection }}
       component_subdirectory: ${{ inputs.component_subdirectory }}
+      conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       container_image: ${{ matrix.container_image }}
       is_enabled: ${{ matrix.is_enabled }}
