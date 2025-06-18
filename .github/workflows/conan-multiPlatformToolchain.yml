@@ -29,15 +29,27 @@ on:
       ubuntu-aarch64-enabled:
         type: boolean
         default: true
+      ubuntu-aarch64-image:
+        type: string
+        default: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
       ubuntu-x86_64-enabled:
         type: boolean
         default: false
+      ubuntu-x86_64-image:
+        type: string
+        default: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
       almalinux-aarch64-enabled:
         type: boolean
         default: true
+      almalinux-aarch64-image:
+        type: string
+        default: "ghcr.io/daversomethingsomethingorg/conan-almalinux:aarch64-latest"
       almalinux-x86_64-enabled:
         type: boolean
         default: false
+      almalinux-x86_64-image:
+        type: string
+        default: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
 
 jobs:
   conan_mp_toolchain:
@@ -47,19 +59,19 @@ jobs:
       matrix:
         include:
           - platform: "ubuntu-aarch64"
-            container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
+            container_image: ${{ inputs.ubuntu-aarch64-image }}
             is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
             conan_deployer: 'deb_deployer'
           - platform: "ubuntu-x86_64"
-            container_image: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
+            container_image: ${{ inputs.ubuntu-x86_64-image }}
             is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
             conan_deployer: 'deb_deployer'
           - platform: "almalinux-aarch64"
-            container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:aarch64-latest"
+            container_image: ${{ inputs.almalinux-aarch64-image }}
             is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
             conan_deployer: 'rpm_deployer'
           - platform: "almalinux-x86_64"
-            container_image: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
+            container_image: ${{ inputs.almalinux-x86_64-image }}
             is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
             conan_deployer: 'rpm_deployer'
     uses: ./.github/workflows/conan-toolchain.yml
