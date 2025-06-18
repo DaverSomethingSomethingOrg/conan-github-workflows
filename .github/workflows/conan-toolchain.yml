@@ -34,7 +34,6 @@ on:
         default:
       conan_deployer_repo:
         type: string
-        required: true
         default: https://github.com/DaverSomethingSomethingOrg/conan-system-packaging.git
       conan_deployer:
         type: string
