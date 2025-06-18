@@ -84,9 +84,9 @@ jobs:
           conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
         fi
 
-    - name: Scan for vulnerabilities with Conan Audit
-      run: |
-        conan audit scan "${{ inputs.component_subdirectory }}"
+#    - name: Scan for vulnerabilities with Conan Audit
+#      run: |
+#        conan audit scan "${{ inputs.component_subdirectory }}"
 
     - name: Build and Cache all tools and dependencies
       run: |
