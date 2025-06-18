@@ -68,6 +68,10 @@ jobs:
 
     - name: Install Conan Toolchain Deployers, Profiles, and Remote
       run: |
+        if [ -z "${{ inputs.conan_profile }}" ]; then
+          # Make sure we have a default profile ready .. GitHub Actions uses a custom $HOME
+          conan profile detect
+        fi
         conan config install ${{ inputs.conan_deployer_repo }}
         if [ -n "${{ inputs.conan_profile_repo }}" ]; then
           conan config install ${{ inputs.conan_profile_repo }}
