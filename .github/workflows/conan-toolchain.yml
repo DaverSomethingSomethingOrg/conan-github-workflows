@@ -67,13 +67,20 @@ jobs:
       uses: conan-io/setup-conan@v1
       with:
          home: ${{ github.workspace }}
-         config_urls:
-         - ${{ inputs.conan_deployer_repo }}
-         - ${{ inputs.conan_profile_repo }}
+         config_urls: |
+           ${{ inputs.conan_deployer_repo }} \
+           ${{ inputs.conan_profile_repo }}
+
 #        audit_token: ${{ secrets.MY_CONAN_AUDIT_TOKEN }}
 
     - name: Install Conan Toolchain Deployers, Profiles, and Remote
       run: |
+        if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
+          conan remote disable conancenter
+          conan remote remove conan-center-local || /bin/true
+          conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
+        fi
+
 #        if [ -z "${{ inputs.conan_profile }}" ]; then
 #          # Make sure we have a default profile ready .. GitHub Actions uses a custom $HOME
 #          conan profile detect --force
@@ -82,11 +89,6 @@ jobs:
 #        if [ -n "${{ inputs.conan_profile_repo }}" ]; then
 #          conan config install ${{ inputs.conan_profile_repo }}
 #        fi
-        if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
-          conan remote disable conancenter
-          conan remote remove conan-center-local || /bin/true
-          conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
-        fi
 
 #    - name: Scan for vulnerabilities with Conan Audit
 #      run: |
