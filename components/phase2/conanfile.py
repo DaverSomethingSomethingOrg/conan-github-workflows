@@ -18,6 +18,8 @@ class Toolchain(ConanFile):
         Yum(self).install(["make", "gcc"])
 
     def requirements(self):
+        self.requires("make/4.4.1")
+        self.requires("cmake/4.0.1")
         self.requires("gcc/15.1.0")
 
     def layout(self):
