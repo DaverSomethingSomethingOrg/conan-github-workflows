@@ -21,6 +21,10 @@ on:
       component_subdirectory:
         type: string
         default: "src"
+      restore_cache_prefix:
+        type: string
+      save_cache_prefix:
+        type: string
       conan_recipe_remote:
         type: string
       toolchain_prefix:
@@ -63,23 +67,30 @@ jobs:
             container_image: ${{ inputs.ubuntu-aarch64-image }}
             is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
             conan_deployer: 'deb_deployer'
+            cache_package_paths: '*.deb'
           - platform: "ubuntu-x86_64"
             container_image: ${{ inputs.ubuntu-x86_64-image }}
             is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
             conan_deployer: 'deb_deployer'
+            cache_package_paths: '*.deb'
           - platform: "almalinux-aarch64"
             container_image: ${{ inputs.almalinux-aarch64-image }}
             is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
             conan_deployer: 'rpm_deployer'
+            cache_package_paths: 'RPM_HOME/rpmbuild/RPMS/*/*'
           - platform: "almalinux-x86_64"
             container_image: ${{ inputs.almalinux-x86_64-image }}
             is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
             conan_deployer: 'rpm_deployer'
+            cache_package_paths: 'RPM_HOME/rpmbuild/RPMS/*/*'
     uses: ./.github/workflows/conan-toolchain.yml
     secrets: inherit
     with:
       runner_selection: ${{ inputs.runner_selection }}
       component_subdirectory: ${{ inputs.component_subdirectory }}
+      restore_cache_key: "${{ inputs.restore_cache_prefix }}/${{ matrix.platform }}"
+      save_cache_key: "${{ inputs.save_cache_prefix }}/${{ matrix.platform }}"
+      cache_package_paths: ${{ matrix.cache_package_paths }}
       conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       container_image: ${{ matrix.container_image }}

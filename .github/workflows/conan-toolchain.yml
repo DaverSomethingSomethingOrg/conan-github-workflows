@@ -24,6 +24,12 @@ on:
       component_subdirectory:
         type: string
         default: "src"
+      restore_cache_key:
+        type: string
+      save_cache_key:
+        type: string
+      cache_package_paths:
+        type: string
       conan_home:
         type: string
       conan_recipe_remote:
@@ -65,6 +71,24 @@ jobs:
       with:
         submodules: true
 
+    - name: Restore Deployed Packages from Cache
+      if: ${{ inputs.restore_cache_key }}
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          package_deploy/${{ inputs.cache_package_paths }}
+        key: ${{ inputs.restore_cache_key }}
+
+    - name: Install Cached RPM Packages
+      if: ${{ inputs.restore_cache_key && hashFiles('package_deploy/RPM_HOME/rpmbuild/RPMS/*/*') != '' }}
+      run: |
+        rpm --install --force --package package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
+
+    - name: Install Cached .deb Packages
+      if: ${{ inputs.restore_cache_key && hashFiles('package_deploy/*.deb') != '' }}
+      run: |
+        dpkg --force-all --install package_deploy/*.deb
+
 #TODO conan-io/setup-conan requires `python` and we have `python3` in our image
 #    - name: Install and setup Conan
 #      uses: conan-io/setup-conan@v1
@@ -80,7 +104,7 @@ jobs:
         if [ -n "${{ inputs.conan_home }}" ]; then
           echo "CONAN_HOME=${{ inputs.conan_home }}" >> $GITHUB_ENV
         else
-          echo "CONAN_HOME=${{ github.workspace }}" >> $GITHUB_ENV
+          echo "CONAN_HOME=${{ github.workspace }}/CONAN_HOME" >> $GITHUB_ENV
         fi
 
     - name: Setup Conan Default Profile and Profile Repo
@@ -123,3 +147,11 @@ jobs:
           --deployer="${{ inputs.conan_deployer }}" \
           --options="*:install_prefix=${{ inputs.toolchain_prefix }}" \
           "${{ inputs.component_subdirectory }}"
+
+    - name: Save Deployed Packages to Cache
+      if: ${{ inputs.save_cache_key }}
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          package_deploy/${{ inputs.cache_package_paths }}
+        key: ${{ inputs.save_cache_key }}
