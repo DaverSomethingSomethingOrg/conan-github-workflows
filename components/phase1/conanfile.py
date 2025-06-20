@@ -18,7 +18,7 @@ class Toolchain(ConanFile):
         Yum(self).install(["make", "binutils", "gcc"])
 
     def requirements(self):
-        self.requires("binutils/2.44")
+        self.requires("binutils/2.42")
 
     def layout(self):
         basic_layout(self, src_folder="src")

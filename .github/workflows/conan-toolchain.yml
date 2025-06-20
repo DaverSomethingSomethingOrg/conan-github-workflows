@@ -97,44 +97,44 @@ jobs:
         echo "New GITHUB_PATH:"
         while IFS= read -r line; do printf '    %s\n' "${line}"; done < $GITHUB_PATH
 
-#TODO conan-io/setup-conan requires `python` and we have `python3` in our image
-#    - name: Install and setup Conan
-#      uses: conan-io/setup-conan@v1
-#      with:
-#         home: ${{ github.workspace }}
-#         config_urls: |
-#           ${{ inputs.conan_deployer_repo }} \
-#           ${{ inputs.conan_profile_repo }}
-##        audit_token: ${{ secrets.MY_CONAN_AUDIT_TOKEN }}
+    - name: Install and setup Conan
+      uses: conan-io/setup-conan@v1
+      with:
+         home: "${{ github.workspace }}/CONAN_HOME"
+         config_urls: |
+           ${{ inputs.conan_deployer_repo }} \
+           ${{ inputs.conan_profile_repo }}
+#        audit_token: ${{ secrets.MY_CONAN_AUDIT_TOKEN }}
 
-    - name: Setup Conan Home
-      run: |
-        if [ -n "${{ inputs.conan_home }}" ]; then
-          echo "CONAN_HOME=${{ inputs.conan_home }}" >> $GITHUB_ENV
-        else
-          echo "CONAN_HOME=${{ github.workspace }}/CONAN_HOME" >> $GITHUB_ENV
-        fi
-
-    - name: Setup Conan Default Profile and Profile Repo
-      run: |
-        if [ -z "${{ inputs.conan_profile }}" ]; then
-          # Make sure we have a default profile ready .. GitHub Actions uses a custom $HOME
-          conan profile detect --force
-        fi
-        if [ -n "${{ inputs.conan_profile_repo }}" ]; then
-          conan config install ${{ inputs.conan_profile_repo }}
-        fi
-
-    - name: Setup Conan Toolchain Deployers
-      run: |
-        conan config install ${{ inputs.conan_deployer_repo }}
+#    - name: Setup Conan Home
+#      run: |
+#        if [ -n "${{ inputs.conan_home }}" ]; then
+#          echo "CONAN_HOME=${{ inputs.conan_home }}" >> $GITHUB_ENV
+#        else
+#          echo "CONAN_HOME=${{ github.workspace }}/CONAN_HOME" >> $GITHUB_ENV
+#        fi
+#
+#    - name: Setup Conan Default Profile and Profile Repo
+#      run: |
+#        if [ -z "${{ inputs.conan_profile }}" ]; then
+#          # Make sure we have a default profile ready .. GitHub Actions uses a custom $HOME
+#          conan profile detect --force
+#        fi
+#        if [ -n "${{ inputs.conan_profile_repo }}" ]; then
+#          conan config install ${{ inputs.conan_profile_repo }}
+#        fi
+#
+#    - name: Setup Conan Toolchain Deployers
+#      run: |
+#        conan config install ${{ inputs.conan_deployer_repo }}
 
     - name: Setup Conan Recipe Remote
       run: |
         if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
           conan remote disable conancenter
-          conan remote remove conan-center-local 2>&1 || /bin/true
+          conan remote remove conan-center-local >/dev/null 2>&1 || /bin/true
           conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
+          conan remote list
         fi
 
 #    - name: Scan for vulnerabilities with Conan Audit
