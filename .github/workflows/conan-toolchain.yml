@@ -85,6 +85,8 @@ jobs:
         echo Installing package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
         rpm --install --force --package package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
+        echo "New GITHUB_PATH:"
+        while IFS= read -r line; do printf '    %s\n' "${line}"; done < $GITHUB_PATH
 
     - name: Install Cached .deb Packages
       if: ${{ inputs.restore_cache_key && hashFiles('package_deploy/*.deb') != '' }}
@@ -92,6 +94,8 @@ jobs:
         echo Installing package_deploy/*.deb
         dpkg --force-all --install package_deploy/*.deb
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
+        echo "New GITHUB_PATH:"
+        while IFS= read -r line; do printf '    %s\n' "${line}"; done < $GITHUB_PATH
 
 #TODO conan-io/setup-conan requires `python` and we have `python3` in our image
 #    - name: Install and setup Conan
