@@ -15,9 +15,12 @@ name: Conan C/C++ multi-platform Toolchain
 on:
   workflow_call:
     inputs:
-      runner_selection:
+      runner_selection-aarch64:
         type: string
-        default: self-hosted
+        default: linux-aarch64
+      runner_selection-x86_64:
+        type: string
+        default: linux-x86_64
       component_subdirectory:
         type: string
         default: "src"
@@ -60,25 +63,29 @@ jobs:
     name: ${{ matrix.platform }}
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 4
       matrix:
         include:
           - platform: "ubuntu-aarch64"
+            runner_selection: ${{ inputs.runner_selection-aarch64 }}
             container_image: ${{ inputs.ubuntu-aarch64-image }}
             is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
             conan_deployer: 'deb_deployer'
             cache_package_paths: '*.deb'
           - platform: "ubuntu-x86_64"
+            runner_selection: ${{ inputs.runner_selection-x86_64 }}
             container_image: ${{ inputs.ubuntu-x86_64-image }}
             is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
             conan_deployer: 'deb_deployer'
             cache_package_paths: '*.deb'
           - platform: "almalinux-aarch64"
+            runner_selection: ${{ inputs.runner_selection-aarch64 }}
             container_image: ${{ inputs.almalinux-aarch64-image }}
             is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
             conan_deployer: 'rpm_deployer'
             cache_package_paths: 'RPM_HOME/rpmbuild/RPMS/*/*'
           - platform: "almalinux-x86_64"
+            runner_selection: ${{ inputs.runner_selection-x86_64 }}
             container_image: ${{ inputs.almalinux-x86_64-image }}
             is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
             conan_deployer: 'rpm_deployer'
@@ -86,7 +93,7 @@ jobs:
     uses: ./.github/workflows/conan-toolchain.yml
     secrets: inherit
     with:
-      runner_selection: ${{ inputs.runner_selection }}
+      runner_selection: ${{ matrix.runner_selection }}
       component_subdirectory: ${{ inputs.component_subdirectory }}
       restore_cache_key: "${{ inputs.restore_cache_prefix }}/${{ matrix.platform }}"
       save_cache_key: "${{ inputs.save_cache_prefix }}/${{ matrix.platform }}"
