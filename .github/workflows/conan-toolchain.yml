@@ -82,7 +82,10 @@ jobs:
     - name: Install Cached RPM Packages
       if: ${{ inputs.restore_cache_key && hashFiles('package_deploy/RPM_HOME/rpmbuild/RPMS/*/*') != '' }}
       run: |
-        echo Installing package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
+        echo "Installing:"
+        for package in package_deploy/RPM_HOME/rpmbuild/RPMS/*/*; do
+          printf '    %s\n' "${package}"
+        done
         rpm --install --force --package package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
         echo "New GITHUB_PATH:"
@@ -91,7 +94,10 @@ jobs:
     - name: Install Cached .deb Packages
       if: ${{ inputs.restore_cache_key && hashFiles('package_deploy/*.deb') != '' }}
       run: |
-        echo Installing package_deploy/*.deb
+        echo "Installing:"
+        for package in package_deploy/*.deb; do
+          printf '    %s\n' "${package}"
+        done
         dpkg --force-all --install package_deploy/*.deb
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
         echo "New GITHUB_PATH:"
@@ -146,6 +152,7 @@ jobs:
 
     - name: Build and Cache all tools and dependencies
       run: |
+        echo "PATH: ${PATH}"
         conan install \
           --build=missing \
           --options="*:install_prefix=${{ inputs.toolchain_prefix }}" \
@@ -153,6 +160,7 @@ jobs:
 
     - name: System Package Deployer
       run: |
+        echo "PATH: ${PATH}"
         conan install \
           --deployer-folder=package_deploy \
           --deployer="${{ inputs.conan_deployer }}" \
