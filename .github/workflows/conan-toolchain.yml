@@ -186,6 +186,9 @@ jobs:
       shell: bash
       env:
         NEXUS_CI_PASSWORD: ${{ secrets.NEXUS_CI_PASSWORD }}
+        NEXUS_CI_USER: ${{ vars.NEXUS_CI_USER }}
+        NEXUS_SERVER: ${{ vars.NEXUS_SERVER }}
+        NEXUS_YUM_REPO: ${{ vars.NEXUS_YUM_REPO }}
       run: |
         . /etc/os-release
         UPLOAD_PACKAGES_SUBDIR="conan-toolchain/${ID}/${VERSION_ID}"
@@ -208,6 +211,9 @@ jobs:
         done
 
         # trigger repo re-index
+        echo "Triggering Repository index rebuild.."
         curl --insecure --verbose \
              --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
              "${NEXUS_SERVER}/service/rest/v1/repositories/${NEXUS_YUM_REPO}/rebuild-index"
+
+        echo "Done."
