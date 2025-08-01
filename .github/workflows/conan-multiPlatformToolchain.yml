@@ -61,6 +61,9 @@ on:
         type: string
 #        default: "ghcr.io/daversomethingsomethingorg/conan-build-almalinux:latest"
         default: "nexus.homelab/conan-build-almalinux:latest"
+      upload_packages:
+        type: boolean
+        default: false
 
 jobs:
   conan_mp_toolchain:
@@ -107,3 +110,4 @@ jobs:
       container_image: ${{ matrix.container_image }}
       is_enabled: ${{ matrix.is_enabled }}
       conan_deployer: ${{ matrix.conan_deployer }}
+      upload_packages: ${{ inputs.upload_packages }}
