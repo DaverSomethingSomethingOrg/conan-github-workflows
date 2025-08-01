@@ -36,7 +36,8 @@ on:
         type: string
       container_image:
         type: string
-        default: 'ubuntu:latest'
+#        default: "ghcr.io/daversomethingsomethingorg/conan-build-ubuntu:latest"
+        default: "nexus.homelab/conan-build-ubuntu:latest"
       conan_profile:
         type: string
         default:
@@ -55,6 +56,9 @@ on:
       is_enabled:
         type: boolean
         default: true
+      upload_packages:
+        type: boolean
+        default: false
 
 jobs:
   toolchain_build:
@@ -174,3 +178,34 @@ jobs:
         path: |
           package_deploy/${{ inputs.cache_package_paths }}
         key: ${{ inputs.save_cache_key }}
+
+    - name: Upload RPM Packages to Artifact Management
+      if: ${{ inputs.upload_packages && hashFiles('package_deploy/RPM_HOME/rpmbuild/RPMS/*/*') != '' }}
+      shell: bash
+      env:
+        NEXUS_CI_PASSWORD: ${{ secrets.NEXUS_CI_PASSWORD }}
+      run: |
+        . /etc/os-release
+        UPLOAD_PACKAGES_SUBDIR="conan-toolchain/${ID}/${VERSION_ID}"
+        RPM_DEPLOY_DIR="package_deploy/RPM_HOME/rpmbuild/RPMS"
+
+        echo "Uploading:"
+        for package in ${RPM_DEPLOY_DIR}/*/*; do
+          rpm_file=$(basename "${package}")
+          arch_dir=$(dirname "${package}")
+          arch=$(basename "${arch_dir}")
+          printf '    %s\n' "${package}"
+
+          curl --insecure --verbose \
+               --user '${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}' \
+               --upload-file "${package}" \
+               "${NEXUS_SERVER}/repository/${NEXUS_YUM_REPO}/${UPLOAD_PACKAGES_SUBDIR}/${arch}/Packages/${rpm_file}"
+        done
+
+        # trigger repo re-index
+        curl --insecure --verbose \
+             --user '${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}' \
+             "${NEXUS_SERVER}/service/rest/v1/repositories/${NEXUS_YUM_REPO}/rebuild-index"
+
+
+

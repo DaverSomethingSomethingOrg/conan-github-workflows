@@ -38,25 +38,29 @@ on:
         default: true
       ubuntu-aarch64-image:
         type: string
-        default: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
+#        default: "ghcr.io/daversomethingsomethingorg/conan-build-ubuntu:latest"
+        default: "nexus.homelab/conan-build-ubuntu:latest"
       ubuntu-x86_64-enabled:
         type: boolean
         default: false
       ubuntu-x86_64-image:
         type: string
-        default: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
+#        default: "ghcr.io/daversomethingsomethingorg/conan-build-ubuntu:latest"
+        default: "nexus.homelab/conan-build-ubuntu:latest"
       almalinux-aarch64-enabled:
         type: boolean
         default: true
       almalinux-aarch64-image:
         type: string
-        default: "ghcr.io/daversomethingsomethingorg/conan-almalinux:aarch64-latest"
+#        default: "ghcr.io/daversomethingsomethingorg/conan-build-almalinux:latest"
+        default: "nexus.homelab/conan-build-almalinux:latest"
       almalinux-x86_64-enabled:
         type: boolean
         default: false
       almalinux-x86_64-image:
         type: string
-        default: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
+#        default: "ghcr.io/daversomethingsomethingorg/conan-build-almalinux:latest"
+        default: "nexus.homelab/conan-build-almalinux:latest"
 
 jobs:
   conan_mp_toolchain:

@@ -14,8 +14,8 @@ class Toolchain(ConanFile):
 
     # For this bootstrapping phase we'll depend on OS vendor-provided compilers
     def system_requirements(self):
-        Apt(self).install(["make", "binutils", "gcc"])
-        Yum(self).install(["make", "binutils", "gcc"])
+        Apt(self).install(["make", "cmake", "binutils", "gcc"])
+        Yum(self).install(["make", "cmake", "binutils", "gcc"])
 
     def requirements(self):
         self.requires("binutils/2.42")

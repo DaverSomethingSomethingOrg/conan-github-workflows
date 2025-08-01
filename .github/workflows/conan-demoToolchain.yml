@@ -52,13 +52,17 @@ jobs:
       conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       ubuntu-aarch64-enabled: "${{ inputs.ubuntu-aarch64-enabled }}"
-      ubuntu-aarch64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-ubuntu:aarch64-latest"
+#      ubuntu-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-ubuntu:latest"
+      ubuntu-aarch64-image: "nexus.homelab/conan-bootstrap-ubuntu:latest"
       ubuntu-x86_64-enabled: ${{ inputs.ubuntu-x86_64-enabled }}
-      ubuntu-x86_64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-ubuntu:x86_64-latest"
+#      ubuntu-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-ubuntu:latest"
+      ubuntu-x86_64-image: "nexus.homelab/conan-bootstrap-ubuntu:latest"
       almalinux-aarch64-enabled: "${{ inputs.almalinux-aarch64-enabled }}"
-      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-almalinux:aarch64-latest"
+#      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
+      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
       almalinux-x86_64-enabled: ${{ inputs.almalinux-x86_64-enabled }}
-      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-almalinux:x86_64-latest"
+#      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
+      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
 
   toolchain_phase2:
     uses: ./.github/workflows/conan-multiPlatformToolchain.yml
@@ -73,19 +77,24 @@ jobs:
       conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       ubuntu-aarch64-enabled: "${{ inputs.ubuntu-aarch64-enabled }}"
-      ubuntu-aarch64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-ubuntu:aarch64-latest"
+#      ubuntu-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-ubuntu:latest"
+      ubuntu-aarch64-image: "nexus.homelab/conan-bootstrap-ubuntu:latest"
       ubuntu-x86_64-enabled: ${{ inputs.ubuntu-x86_64-enabled }}
-      ubuntu-x86_64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-ubuntu:x86_64-latest"
+#      ubuntu-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-ubuntu:latest"
+      ubuntu-x86_64-image: "nexus.homelab/conan-bootstrap-ubuntu:latest"
       almalinux-aarch64-enabled: "${{ inputs.almalinux-aarch64-enabled }}"
-      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-almalinux:aarch64-latest"
+#      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
+      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
       almalinux-x86_64-enabled: ${{ inputs.almalinux-x86_64-enabled }}
-      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/bootstrap-almalinux:x86_64-latest"
+#      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
+      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
 
   toolchain_phase3:
     uses: ./.github/workflows/conan-multiPlatformToolchain.yml
     secrets: inherit
     needs: toolchain_phase2
     with:
+      upload_packages: true
       component_subdirectory: "components/phase3"
       restore_cache_prefix: "toolchain_phase2-${{ github.run_id }}"
       save_cache_prefix: "toolchain_phase3-${{ github.run_id }}"
@@ -94,6 +103,14 @@ jobs:
       conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       ubuntu-aarch64-enabled: "${{ inputs.ubuntu-aarch64-enabled }}"
+#      ubuntu-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-base-ubuntu:latest"
+      ubuntu-aarch64-image: "nexus.homelab/conan-base-ubuntu:latest"
       ubuntu-x86_64-enabled: ${{ inputs.ubuntu-x86_64-enabled }}
+#      ubuntu-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-base-ubuntu:latest"
+      ubuntu-x86_64-image: "nexus.homelab/conan-base-ubuntu:latest"
       almalinux-aarch64-enabled: "${{ inputs.almalinux-aarch64-enabled }}"
+#      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-base-almalinux:latest"
+      almalinux-aarch64-image: "nexus.homelab/conan-base-almalinux:latest"
       almalinux-x86_64-enabled: ${{ inputs.almalinux-x86_64-enabled }}
+#      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-base-almalinux:latest"
+      almalinux-x86_64-image: "nexus.homelab/conan-base-almalinux:latest"
