@@ -67,8 +67,10 @@ jobs:
     container:
       image: ${{ inputs.container_image }}
       credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+#        username: ${{ github.actor }}
+#        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ vars.NEXUS_CI_USER }}
+        password: ${{ secrets.NEXUS_CI_PASSWORD }}
 
     steps:
     - uses: actions/checkout@v4
@@ -206,6 +208,3 @@ jobs:
         curl --insecure --verbose \
              --user '${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}' \
              "${NEXUS_SERVER}/service/rest/v1/repositories/${NEXUS_YUM_REPO}/rebuild-index"
-
-
-
