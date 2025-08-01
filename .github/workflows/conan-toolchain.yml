@@ -198,13 +198,16 @@ jobs:
           arch=$(basename "${arch_dir}")
           printf '    %s\n' "${package}"
 
+          echo curl --insecure --verbose \
+               --upload-file "${package}" \
+               "${NEXUS_SERVER}/repository/${NEXUS_YUM_REPO}/${UPLOAD_PACKAGES_SUBDIR}/${arch}/Packages/${rpm_file}"
           curl --insecure --verbose \
-               --user '${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}' \
+               --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
                --upload-file "${package}" \
                "${NEXUS_SERVER}/repository/${NEXUS_YUM_REPO}/${UPLOAD_PACKAGES_SUBDIR}/${arch}/Packages/${rpm_file}"
         done
 
         # trigger repo re-index
         curl --insecure --verbose \
-             --user '${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}' \
+             --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
              "${NEXUS_SERVER}/service/rest/v1/repositories/${NEXUS_YUM_REPO}/rebuild-index"
