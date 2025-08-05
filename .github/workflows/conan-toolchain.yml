@@ -92,7 +92,7 @@ jobs:
         for package in package_deploy/RPM_HOME/rpmbuild/RPMS/*/*; do
           printf '    %s\n' "${package}"
         done
-        rpm --install --force --package package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
+        rpm --install --package package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
         echo "New GITHUB_PATH:"
         while IFS= read -r line; do printf '    %s\n' "${line}"; done < $GITHUB_PATH
@@ -104,7 +104,7 @@ jobs:
         for package in package_deploy/*.deb; do
           printf '    %s\n' "${package}"
         done
-        dpkg --force-all --install package_deploy/*.deb
+        dpkg --install package_deploy/*.deb
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
         echo "New GITHUB_PATH:"
         while IFS= read -r line; do printf '    %s\n' "${line}"; done < $GITHUB_PATH
@@ -201,10 +201,7 @@ jobs:
           arch=$(basename "${arch_dir}")
           printf '    %s\n' "${package}"
 
-          echo curl --insecure --verbose \
-               --upload-file "${package}" \
-               "${NEXUS_SERVER}/repository/${NEXUS_YUM_REPO}/${UPLOAD_PACKAGES_SUBDIR}/${arch}/Packages/${rpm_file}"
-          curl --insecure --verbose \
+          curl --insecure \
                --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
                --upload-file "${package}" \
                "${NEXUS_SERVER}/repository/${NEXUS_YUM_REPO}/${UPLOAD_PACKAGES_SUBDIR}/${arch}/Packages/${rpm_file}"
@@ -212,7 +209,7 @@ jobs:
 
         # trigger repo re-index
         echo "Triggering Repository index rebuild.."
-        curl --insecure --verbose \
+        curl --insecure \
              --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
              "${NEXUS_SERVER}/service/rest/v1/repositories/${NEXUS_YUM_REPO}/rebuild-index"
 

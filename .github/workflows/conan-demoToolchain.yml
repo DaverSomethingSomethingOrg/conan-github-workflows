@@ -59,10 +59,12 @@ jobs:
       ubuntu-x86_64-image: "nexus.homelab/conan-bootstrap-ubuntu:latest"
       almalinux-aarch64-enabled: "${{ inputs.almalinux-aarch64-enabled }}"
 #      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
-      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+#      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:aarch64-latest"
       almalinux-x86_64-enabled: ${{ inputs.almalinux-x86_64-enabled }}
 #      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
-      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+#      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:x86_64-latest"
 
   toolchain_phase2:
     uses: ./.github/workflows/conan-multiPlatformToolchain.yml
@@ -84,10 +86,12 @@ jobs:
       ubuntu-x86_64-image: "nexus.homelab/conan-bootstrap-ubuntu:latest"
       almalinux-aarch64-enabled: "${{ inputs.almalinux-aarch64-enabled }}"
 #      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
-      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+#      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+      almalinux-aarch64-image: "nexus.homelab/conan-bootstrap-almalinux:aarch64-latest"
       almalinux-x86_64-enabled: ${{ inputs.almalinux-x86_64-enabled }}
 #      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-bootstrap-almalinux:latest"
-      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+#      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:latest"
+      almalinux-x86_64-image: "nexus.homelab/conan-bootstrap-almalinux:x86_64-latest"
 
   toolchain_phase3:
     uses: ./.github/workflows/conan-multiPlatformToolchain.yml
@@ -110,7 +114,9 @@ jobs:
       ubuntu-x86_64-image: "nexus.homelab/conan-base-ubuntu:latest"
       almalinux-aarch64-enabled: "${{ inputs.almalinux-aarch64-enabled }}"
 #      almalinux-aarch64-image: "ghcr.io/daversomethingsomethingorg/conan-base-almalinux:latest"
-      almalinux-aarch64-image: "nexus.homelab/conan-base-almalinux:latest"
+#      almalinux-aarch64-image: "nexus.homelab/conan-base-almalinux:latest"
+      almalinux-aarch64-image: "nexus.homelab/conan-base-almalinux:aarch64-latest"
       almalinux-x86_64-enabled: ${{ inputs.almalinux-x86_64-enabled }}
 #      almalinux-x86_64-image: "ghcr.io/daversomethingsomethingorg/conan-base-almalinux:latest"
-      almalinux-x86_64-image: "nexus.homelab/conan-base-almalinux:latest"
+#      almalinux-x86_64-image: "nexus.homelab/conan-base-almalinux:latest"
+      almalinux-x86_64-image: "nexus.homelab/conan-base-almalinux:x86_64-latest"
