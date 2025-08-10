@@ -36,8 +36,7 @@ on:
         type: string
       container_image:
         type: string
-#        default: "ghcr.io/daversomethingsomethingorg/conan-build-ubuntu:latest"
-        default: "nexus.homelab/conan-build-ubuntu:latest"
+        default: "nexus.homelab/conan-build-almalinux:aarch64-latest"
       conan_profile:
         type: string
         default:
