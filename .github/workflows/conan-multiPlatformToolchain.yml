@@ -38,15 +38,13 @@ on:
         default: true
       ubuntu-aarch64-image:
         type: string
-#        default: "ghcr.io/daversomethingsomethingorg/conan-build-ubuntu:latest"
-        default: "nexus.homelab/conan-build-ubuntu:latest"
+        default: "nexus.homelab/conan-build-ubuntu:aarch64-latest"
       ubuntu-x86_64-enabled:
         type: boolean
         default: false
       ubuntu-x86_64-image:
         type: string
-#        default: "ghcr.io/daversomethingsomethingorg/conan-build-ubuntu:latest"
-        default: "nexus.homelab/conan-build-ubuntu:latest"
+        default: "nexus.homelab/conan-build-ubuntu:aarch64-latest"
       almalinux-aarch64-enabled:
         type: boolean
         default: true
@@ -95,7 +93,9 @@ jobs:
             is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
             conan_deployer: 'rpm_deployer'
             cache_package_paths: 'RPM_HOME/rpmbuild/RPMS/*/*'
-    uses: ./.github/workflows/conan-toolchain.yml
+#HACK gh act extension seems to be misinterpreting this
+#    uses: ./.github/workflows/conan-toolchain.yml
+    uses: DaverSomethingSomethingOrg/conan-github-workflows/.github/workflows/conan-toolchain.yml@main
     secrets: inherit
     with:
       runner_selection: ${{ matrix.runner_selection }}
