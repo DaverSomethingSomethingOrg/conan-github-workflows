@@ -227,16 +227,8 @@ jobs:
         for package in package_deploy/*.deb; do
           printf '    %s\n' "${package}"
 
+          # Adapted from:
           # https://help.sonatype.com/en/apt-repositories.html#deploying-packages-to-hosted-apt-repositories
-          # curl \
-          #      -u "admin:admin123" \
-          #      -H "Content-Type: multipart/form-data" \
-          #      --data-binary "@./test.deb" \
-          #      "http://localhost:8081/repository/apt-hosted/"
-
-          # curl --insecure \
-          #     --upload-file "${package}" \
-
           curl \
              --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
              --header "Content-Type: multipart/form-data" \
@@ -248,7 +240,6 @@ jobs:
         # trigger repo re-index
         echo "Triggering Repository index rebuild.."
  
-        # curl --insecure \
         curl \
              --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
              "${NEXUS_SERVER}/service/rest/v1/repositories/${NEXUS_APT_REPO}/rebuild-index"
