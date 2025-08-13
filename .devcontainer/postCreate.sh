@@ -14,11 +14,11 @@
 case "${ID}" in
     ubuntu | debian)
         # Official `python` image is Debian based.
-        export DEBIAN_FRONTEND=noninteractive
-        apt-get install --no-install-recommends -y \
-            gh
-# TODO            docker-ce \
-        gh extension install nektos/gh-act
+#        export DEBIAN_FRONTEND=noninteractive
+#        apt-get install --no-install-recommends -y \
+#            gh
+#            docker-ce \
+#        gh extension install nektos/gh-act
         ;;
     almalinux)
         # For RH* support we use AlmaLinux
