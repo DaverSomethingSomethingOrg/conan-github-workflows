@@ -227,6 +227,7 @@ jobs:
         for package in package_deploy/*.deb; do
           printf '    %s\n' "${package}"
 
+          # https://help.sonatype.com/en/apt-repositories.html#deploying-packages-to-hosted-apt-repositories
           # curl \
           #      -u "admin:admin123" \
           #      -H "Content-Type: multipart/form-data" \
@@ -234,11 +235,14 @@ jobs:
           #      "http://localhost:8081/repository/apt-hosted/"
 
           # curl --insecure \
+          #     --upload-file "${package}" \
 
           curl \
              --user "${NEXUS_CI_USER}:${NEXUS_CI_PASSWORD}" \
-               --upload-file "${package}" \
-               "${NEXUS_SERVER}/repository/${NEXUS_APT_REPO}/"
+             --header "Content-Type: multipart/form-data" \
+             --data-binary "@./${package}" \
+             "${NEXUS_SERVER}/repository/${NEXUS_APT_REPO}/"
+
         done
 
         # trigger repo re-index
