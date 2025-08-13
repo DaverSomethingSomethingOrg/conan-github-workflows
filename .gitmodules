@@ -1,4 +1,0 @@
-[submodule "conan-center-index"]
-	path = conan-center-index
-	url = https://github.com/daversomethingsomething/conan-center-index.git
-	branch = feature/prefix
