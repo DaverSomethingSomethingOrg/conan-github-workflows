@@ -41,7 +41,7 @@ on:
         required: false
       container_push:
         type: string
-        required: false
+        default: false
       container_username:
         type: string
         required: false
