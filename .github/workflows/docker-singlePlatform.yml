@@ -40,7 +40,7 @@ on:
         type: string
         required: false
       container_push:
-        type: string
+        type: boolean
         default: false
       container_username:
         type: string
