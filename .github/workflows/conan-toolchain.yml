@@ -32,7 +32,11 @@ on:
         type: string
       conan_home:
         type: string
-      conan_recipe_remote:
+      conan_local_recipes:
+        type: string
+      conan_local_repo:
+        type: string
+      conan_center_proxy:
         type: string
       container_image:
         type: string
@@ -142,14 +146,24 @@ jobs:
       run: |
         conan config install ${{ inputs.conan_deployer_repo }}
 
-    - name: Setup Conan Recipe Remote
+    - name: Setup Conan Recipe Remotes
       run: |
-        if [ -n "${{ inputs.conan_recipe_remote }}" ]; then
+        if [ -n "${{ inputs.conan_center_proxy }}" ]; then
           conan remote disable conancenter
-          conan remote remove conan-center-local >/dev/null 2>&1 || /bin/true
-          conan remote add conan-center-local "${{ inputs.conan_recipe_remote }}"
-          conan remote list
+          conan remote add conan-center-proxy "${{ inputs.conan_center_proxy }}"
         fi
+
+        if [ -n "${{ inputs.conan_local_recipes }}" ]; then
+          conan remote remove conan-local-recipes >/dev/null 2>&1 || /bin/true
+          conan remote add -t local-recipes-index conan-local-recipes "${{ inputs.conan_local_recipes }}"
+        fi
+
+        if [ -n "${{ inputs.conan_local_repo }}" ]; then
+          conan remote remove conan-local-repo >/dev/null 2>&1 || /bin/true
+          conan remote add conan-local-repo "${{ inputs.conan_local_repo }}"
+        fi
+
+        conan remote list
 
 #    - name: Scan for vulnerabilities with Conan Audit
 #      run: |
