@@ -151,16 +151,19 @@ jobs:
         if [ -n "${{ inputs.conan_center_proxy }}" ]; then
           conan remote disable conancenter
           conan remote add conan-center-proxy "${{ inputs.conan_center_proxy }}"
+          conan remote update conan-center-proxy --index 0
         fi
 
         if [ -n "${{ inputs.conan_local_recipes }}" ]; then
           conan remote remove conan-local-recipes >/dev/null 2>&1 || /bin/true
           conan remote add -t local-recipes-index conan-local-recipes "${{ inputs.conan_local_recipes }}"
+          conan remote update conan-local-recipes --index 0
         fi
 
         if [ -n "${{ inputs.conan_local_repo }}" ]; then
           conan remote remove conan-local-repo >/dev/null 2>&1 || /bin/true
           conan remote add conan-local-repo "${{ inputs.conan_local_repo }}"
+          conan remote update conan-local-repo --index 0
         fi
 
         conan remote list
