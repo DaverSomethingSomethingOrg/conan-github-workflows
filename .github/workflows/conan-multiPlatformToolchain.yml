@@ -28,7 +28,11 @@ on:
         type: string
       save_cache_prefix:
         type: string
-      conan_recipe_remote:
+      conan_local_recipes:
+        type: string
+      conan_local_repo:
+        type: string
+      conan_center_proxy:
         type: string
       toolchain_prefix:
         type: string
@@ -103,7 +107,9 @@ jobs:
       restore_cache_key: "${{ inputs.restore_cache_prefix }}/${{ matrix.platform }}"
       save_cache_key: "${{ inputs.save_cache_prefix }}/${{ matrix.platform }}"
       cache_package_paths: ${{ matrix.cache_package_paths }}
-      conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
+      conan_local_recipes: ${{ inputs.conan_local_recipes }}
+      conan_local_repo: ${{ inputs.conan_local_repo }}
+      conan_center_proxy: ${{ inputs.conan_center_proxy }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       container_image: ${{ matrix.container_image }}
       is_enabled: ${{ matrix.is_enabled }}
