@@ -80,15 +80,15 @@ jobs:
 
     # We do this dynamically to reduce #inputs
     # We can get away with this because we know how our deployer works here.
-    - name: Determine Cached Package Paths
-      id: determine_package_paths
+    - name: Configure Workflow Environment
+      id: configure_workflow_environment
       run: |
-        if [ "${{ inputs.conan_deployer }}" == "deb_deployer" ]; then
+        if [ "${{ inputs.conan_deployer }}" = "deb_deployer" ]; then
           echo "CACHE_PACKAGE_PATHS='*.deb'" >> $GITHUB_ENV
-        elif [ "${{ inputs.conan_deployer }}" == "rpm_deployer" ]; then
+        elif [ "${{ inputs.conan_deployer }}" = "rpm_deployer" ]; then
           echo "CACHE_PACKAGE_PATHS='RPM_HOME/rpmbuild/RPMS/*/*'" >> $GITHUB_ENV
         else
-          echo "ERROR: Unsupported Conan Deployer: 'inputs.conan_deployer }}'"
+          echo "ERROR: Unsupported Conan Deployer: '${{ inputs.conan_deployer }}'"
           exit 1
         fi
 
