@@ -19,6 +19,9 @@ on:
       runner_selection:
         type: string
         default: self-hosted
+      container_image:
+        type: string
+        default: "nexus.homelab/conan-docker-build-ubuntu:x86_64-latest"
       dockerfile:
         type: string
       docker_context:
@@ -26,7 +29,6 @@ on:
       image_tag:
         type: string
         required: true
-        # default: "nexus.homelab/conan-base-ubuntu:aarch64-latest"
       build_target:
         type: string
         required: false
@@ -63,11 +65,15 @@ jobs:
     name: "docker_image_build: ${{ inputs.image_tag }}"
     if: ${{ inputs.is_enabled }}
     runs-on: ${{ inputs.runner_selection }}
-#    container:
-#      image: ${{ inputs.container_image }}
-#      credentials:
+    container:
+      image: ${{ inputs.container_image }}
+      credentials:
 #        username: ${{ github.actor }}
 #        password: ${{ secrets.GH_TOKEN }}
+#        username: ${{ vars.NEXUS_CI_USER }}
+#        password: ${{ secrets.NEXUS_CI_PASSWORD }}
+        username: ${{ inputs.container_username }}
+        password: ${{ secrets.container_password }}
 
     steps:
       - name: Checkout Source
