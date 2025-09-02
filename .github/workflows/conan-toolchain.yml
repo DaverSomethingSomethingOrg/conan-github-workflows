@@ -84,9 +84,9 @@ jobs:
       id: configure_workflow_environment
       run: |
         if [ "${{ inputs.conan_deployer }}" = "deb_deployer" ]; then
-          echo "CACHE_PACKAGE_PATHS='*.deb'" >> $GITHUB_ENV
+          echo "CACHE_PACKAGE_PATHS=*.deb" >> $GITHUB_ENV
         elif [ "${{ inputs.conan_deployer }}" = "rpm_deployer" ]; then
-          echo "CACHE_PACKAGE_PATHS='RPM_HOME/rpmbuild/RPMS/*/*'" >> $GITHUB_ENV
+          echo "CACHE_PACKAGE_PATHS=RPM_HOME/rpmbuild/RPMS/*/*" >> $GITHUB_ENV
         else
           echo "ERROR: Unsupported Conan Deployer: '${{ inputs.conan_deployer }}'"
           exit 1
