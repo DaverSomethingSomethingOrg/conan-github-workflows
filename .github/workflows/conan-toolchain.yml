@@ -83,9 +83,9 @@ jobs:
     - name: Determine Cached Package Paths
       id: determine_package_paths
       run: |
-        if [[ "${{ inputs.conan_deployer }}" == "deb_deployer" ]]; then
+        if [ "${{ inputs.conan_deployer }}" == "deb_deployer" ]; then
           echo "CACHE_PACKAGE_PATHS='*.deb'" >> $GITHUB_ENV
-        elsif [[ "${{ inputs.conan_deployer }}" == "rpm_deployer" ]]; then
+        elif [ "${{ inputs.conan_deployer }}" == "rpm_deployer" ]; then
           echo "CACHE_PACKAGE_PATHS='RPM_HOME/rpmbuild/RPMS/*/*'" >> $GITHUB_ENV
         else
           echo "ERROR: Unsupported Conan Deployer: 'inputs.conan_deployer }}'"
