@@ -102,21 +102,21 @@ jobs:
 
     - name: Install Cached RPM Packages
       if: ${{ inputs.restore_cache_key
-       && inputs.conan_deployer == 'rpm_deployer'
+       && inputs.conan_deployer == rpm_deployer
        && hashFiles('package_deploy/${{ env.CACHE_PACKAGE_PATHS }}') != '' }}
       run: |
         echo "Installing:"
-        for package in package_deploy/RPM_HOME/rpmbuild/RPMS/*/*; do
+        for package in package_deploy/${{ env.CACHE_PACKAGE_PATHS }}; do
           printf '    %s\n' "${package}"
         done
-        rpm --install --package package_deploy/RPM_HOME/rpmbuild/RPMS/*/*
+        rpm --install --package package_deploy/${{ env.CACHE_PACKAGE_PATHS }}
         echo "${{ inputs.toolchain_prefix }}/bin" >> $GITHUB_PATH
         echo "New GITHUB_PATH:"
         while IFS= read -r line; do printf '    %s\n' "${line}"; done < $GITHUB_PATH
 
     - name: Install Cached .deb Packages
       if: ${{ inputs.restore_cache_key
-       && inputs.conan_deployer == 'deb_deployer'
+       && inputs.conan_deployer == deb_deployer
        && hashFiles('package_deploy/${{ env.CACHE_PACKAGE_PATHS }}') != '' }}
       run: |
         echo "Installing:"
