@@ -103,7 +103,7 @@ jobs:
     - name: Install Cached RPM Packages
       if: ${{ inputs.restore_cache_key
        && inputs.conan_deployer == 'rpm_deployer'
-       && hashFiles('package_deploy/${{ env.CACHE_PACKAGE_PATHS }}') != '' }}
+       && hashFiles(format('package_deploy/{0}', env.CACHE_PACKAGE_PATHS)) != '' }}
       run: |
         echo "Installing:"
         for package in package_deploy/${{ env.CACHE_PACKAGE_PATHS }}; do
@@ -117,7 +117,7 @@ jobs:
     - name: Install Cached .deb Packages
       if: ${{ inputs.restore_cache_key
        && inputs.conan_deployer == 'deb_deployer'
-       && hashFiles('package_deploy/${{ env.CACHE_PACKAGE_PATHS }}') != '' }}
+       && hashFiles(format('package_deploy/{0}', env.CACHE_PACKAGE_PATHS)) != '' }}
       run: |
         echo "Installing:"
         for package in package_deploy/${{ env.CACHE_PACKAGE_PATHS }}; do
