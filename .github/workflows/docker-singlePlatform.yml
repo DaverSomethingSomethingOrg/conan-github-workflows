@@ -59,7 +59,8 @@ on:
         required: false
 
 jobs:
-  docker_build:
+  docker_image_build:
+    name: "docker_image_build: ${{ inputs.image_tag }}"
     if: ${{ inputs.is_enabled }}
     runs-on: ${{ inputs.runner_selection }}
 #    container:

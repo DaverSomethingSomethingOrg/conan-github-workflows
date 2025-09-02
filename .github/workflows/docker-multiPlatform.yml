@@ -1,9 +1,9 @@
 ######################################################################
-# conan-multiPlatform.yml
+# docker-multiPlatform.yml
 #
 # Copyright © 2025 David L. Armstrong
 #
-# This workflow will optionally run the conan-singlePlatform.yml workflow
+# This workflow will optionally run the docker-singlePlatform.yml workflow
 # across a list of selected platforms.
 #
 # For more information see:
@@ -26,14 +26,6 @@ on:
         default: "src"
       restore_cache_prefix:
         type: string
-      save_cache_prefix:
-        type: string
-      conan_local_recipes:
-        type: string
-      conan_local_repo:
-        type: string
-      conan_center_proxy:
-        type: string
       toolchain_prefix:
         type: string
         required: true
@@ -42,31 +34,29 @@ on:
         default: true
       ubuntu-aarch64-image:
         type: string
-        default: "nexus.homelab/conan-build-ubuntu:aarch64-latest"
+        default: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:aarch64-latest"
       ubuntu-x86_64-enabled:
         type: boolean
         default: false
       ubuntu-x86_64-image:
         type: string
-        default: "nexus.homelab/conan-build-ubuntu:aarch64-latest"
+        default: "ghcr.io/daversomethingsomethingorg/conan-ubuntu:x86_64-latest"
       almalinux-aarch64-enabled:
         type: boolean
         default: true
       almalinux-aarch64-image:
         type: string
-        default: "nexus.homelab/conan-build-almalinux:aarch64-latest"
+        default: "nexus.homelab/conan-docker-build-almalinux:aarch64-latest"
       almalinux-x86_64-enabled:
         type: boolean
         default: false
       almalinux-x86_64-image:
         type: string
-        default: "nexus.homelab/conan-build-almalinux:x86_64-latest"
-      upload_packages:
-        type: boolean
-        default: false
+        default: "ghcr.io/daversomethingsomethingorg/conan-almalinux:x86_64-latest"
 
 jobs:
   conan_mp_toolchain:
+    name: ${{ matrix.platform }}
     strategy:
       fail-fast: false
       max-parallel: 4
@@ -77,35 +67,37 @@ jobs:
             container_image: ${{ inputs.ubuntu-aarch64-image }}
             is_enabled: ${{ inputs.ubuntu-aarch64-enabled }}
             conan_deployer: 'deb_deployer'
+            cache_package_paths: '*.deb'
           - platform: "ubuntu-x86_64"
             runner_selection: ${{ inputs.runner_selection-x86_64 }}
             container_image: ${{ inputs.ubuntu-x86_64-image }}
             is_enabled: ${{ inputs.ubuntu-x86_64-enabled }}
             conan_deployer: 'deb_deployer'
+            cache_package_paths: '*.deb'
           - platform: "almalinux-aarch64"
             runner_selection: ${{ inputs.runner_selection-aarch64 }}
             container_image: ${{ inputs.almalinux-aarch64-image }}
             is_enabled: ${{ inputs.almalinux-aarch64-enabled }}
             conan_deployer: 'rpm_deployer'
+            cache_package_paths: 'RPM_HOME/rpmbuild/RPMS/*/*'
           - platform: "almalinux-x86_64"
             runner_selection: ${{ inputs.runner_selection-x86_64 }}
             container_image: ${{ inputs.almalinux-x86_64-image }}
             is_enabled: ${{ inputs.almalinux-x86_64-enabled }}
             conan_deployer: 'rpm_deployer'
+            cache_package_paths: 'RPM_HOME/rpmbuild/RPMS/*/*'
 #HACK gh act extension seems to be misinterpreting this
-#    uses: ./.github/workflows/conan-toolchain.yml
-    uses: DaverSomethingSomethingOrg/conan-github-workflows/.github/workflows/conan-toolchain.yml@main
+#    uses: ./.github/workflows/docker-singlePlatform.yml
+    uses: DaverSomethingSomethingOrg/conan-github-workflows/.github/workflows/docker-singlePlatform.yml@main
     secrets: inherit
     with:
       runner_selection: ${{ matrix.runner_selection }}
       component_subdirectory: ${{ inputs.component_subdirectory }}
       restore_cache_key: "${{ inputs.restore_cache_prefix }}/${{ matrix.platform }}"
       save_cache_key: "${{ inputs.save_cache_prefix }}/${{ matrix.platform }}"
-      conan_local_recipes: ${{ inputs.conan_local_recipes }}
-      conan_local_repo: ${{ inputs.conan_local_repo }}
-      conan_center_proxy: ${{ inputs.conan_center_proxy }}
+      cache_package_paths: ${{ matrix.cache_package_paths }}
+      conan_recipe_remote: ${{ inputs.conan_recipe_remote }}
       toolchain_prefix: ${{ inputs.toolchain_prefix }}
       container_image: ${{ matrix.container_image }}
       is_enabled: ${{ matrix.is_enabled }}
       conan_deployer: ${{ matrix.conan_deployer }}
-      upload_packages: ${{ inputs.upload_packages }}
