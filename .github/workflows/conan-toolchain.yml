@@ -148,7 +148,7 @@ jobs:
     - name: Setup Conan Home
       run: |
         if [ "${{ inputs.conan_home_host_path }}" != "/dev/null" ]; then
-          echo "CONAN_HOME=/CONAN_HOME_HOST_PATH }}" >> $GITHUB_ENV
+          echo "CONAN_HOME=/CONAN_HOME_HOST_PATH" >> $GITHUB_ENV
         elif [ -n "${{ inputs.conan_home }}" ]; then
           echo "CONAN_HOME=${{ inputs.conan_home }}" >> $GITHUB_ENV
         else
