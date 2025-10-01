@@ -28,6 +28,9 @@ on:
         type: string
       save_cache_key:
         type: string
+      conan_home_host_path:
+        type: string
+        default: /dev/null # default should be able to be volume mounted safely
       conan_home:
         type: string
       conan_local_recipes:
@@ -67,6 +70,8 @@ jobs:
     runs-on: ${{ inputs.runner_selection }}
     container:
       image: ${{ inputs.container_image }}
+      volumes:
+        - ${{ inputs.conan_home_host_path }}:/CONAN_HOME_HOST_PATH
       credentials:
 #        username: ${{ github.actor }}
 #        password: ${{ secrets.GITHUB_TOKEN }}
@@ -142,7 +147,9 @@ jobs:
 
     - name: Setup Conan Home
       run: |
-        if [ -n "${{ inputs.conan_home }}" ]; then
+        if [ "${{ inputs.conan_home }}" -ne "/dev/null" ]; then
+          echo "CONAN_HOME=/CONAN_HOME_HOST_PATH }}" >> $GITHUB_ENV
+        elif [ -n "${{ inputs.conan_home }}" ]; then
           echo "CONAN_HOME=${{ inputs.conan_home }}" >> $GITHUB_ENV
         else
           echo "CONAN_HOME=${{ github.workspace }}/CONAN_HOME" >> $GITHUB_ENV
