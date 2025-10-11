@@ -65,15 +65,16 @@ jobs:
     name: "docker_image_build: ${{ inputs.image_tag }}"
     if: ${{ inputs.is_enabled }}
     runs-on: ${{ inputs.runner_selection }}
-    container:
-      image: ${{ inputs.container_image }}
-      credentials:
-#        username: ${{ github.actor }}
-#        password: ${{ secrets.GH_TOKEN }}
-#        username: ${{ vars.NEXUS_CI_USER }}
-#        password: ${{ secrets.NEXUS_CI_PASSWORD }}
-        username: ${{ inputs.container_username }}
-        password: ${{ secrets.container_password }}
+#HACK Switch to default dind image used by ARC Runner
+#    container:
+#      image: ${{ inputs.container_image }}
+#      credentials:
+##        username: ${{ github.actor }}
+##        password: ${{ secrets.GH_TOKEN }}
+##        username: ${{ vars.NEXUS_CI_USER }}
+##        password: ${{ secrets.NEXUS_CI_PASSWORD }}
+#        username: ${{ inputs.container_username }}
+#        password: ${{ secrets.container_password }}
 
     steps:
       - name: Checkout Source
