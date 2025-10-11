@@ -67,10 +67,6 @@ jobs:
     runs-on: ${{ inputs.runner_selection }}
     container:
       image: ${{ inputs.container_image }}
-      volumes:
-        - /run/docker/docker.sock:/run/docker/docker.sock
-      env:
-        DOCKER_HOST: unix:///run/docker/docker.sock
       credentials:
 #        username: ${{ github.actor }}
 #        password: ${{ secrets.GH_TOKEN }}
