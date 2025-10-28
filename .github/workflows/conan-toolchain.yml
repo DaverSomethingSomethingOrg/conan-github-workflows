@@ -70,8 +70,8 @@ jobs:
     runs-on: ${{ inputs.runner_selection }}
     container:
       image: ${{ inputs.container_image }}
-      volumes:
-        - ${{ inputs.conan_home_host_path }}:/CONAN_HOME_HOST_PATH
+#      volumes:
+#        - ${{ inputs.conan_home_host_path }}:/CONAN_HOME_HOST_PATH
       credentials:
 #        username: ${{ github.actor }}
 #        password: ${{ secrets.GITHUB_TOKEN }}
@@ -183,7 +183,7 @@ jobs:
           conan remote update conan-local-recipes --index 0
         fi
 
-        if [ -n "${{ inputs.conan_local_repo }}" -o "${{ inputs.conan_local_repo }}" -ne "undefined" ]; then
+        if [ -n "${{ inputs.conan_local_repo }}" -o "${{ inputs.conan_local_repo }}" != "undefined" ]; then
           conan remote remove conan-local-repo >/dev/null 2>&1 || /bin/true
           conan remote add conan-local-repo "${{ inputs.conan_local_repo }}"
           conan remote update conan-local-repo --index 0
